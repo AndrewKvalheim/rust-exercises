@@ -1,7 +1,5 @@
 [dependencies]
-
-[features]
-grapheme = []
+grapheme = { version = "1.2.1", package = "unicode-segmentation", optional = true }
 
 [package]
 edition = "2018"
