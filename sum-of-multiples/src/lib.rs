@@ -1,7 +1,12 @@
+mod utilities;
+
+use utilities::IteratorUtilities;
+
 pub fn sum_of_multiples(limit: u32, factors: &[u32]) -> u32 {
-    unimplemented!(
-        "Sum the multiples of all of {:?} which are less than {}",
-        factors,
-        limit
-    )
+    factors
+        .iter()
+        .filter(|&&factor| factor != 0)
+        .flat_map(|&factor| (factor..limit).step_by(factor as usize))
+        .unique()
+        .sum()
 }
