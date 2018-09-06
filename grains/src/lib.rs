@@ -1,7 +1,11 @@
-pub fn square(s: u32) -> u64 {
-    unimplemented!("grains of rice on square {}", s);
+pub fn square(n: u32) -> u64 {
+    if !(1 <= n && n <= 64) {
+        panic!("Square must be between 1 and 64");
+    }
+
+    2u64.pow(n - 1)
 }
 
 pub fn total() -> u64 {
-    unimplemented!();
+    u64::max_value() // (1..=64).map(square).sum()
 }
