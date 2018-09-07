@@ -1,3 +1,6 @@
 pub fn factors(n: u64) -> Vec<u64> {
-    unimplemented!("This should calculate the prime factors of {}", n)
+    match (2..=n).find(|factor| n % factor == 0) {
+        None => vec![],
+        Some(factor) => [vec![factor], factors(n / factor)].concat(),
+    }
 }
