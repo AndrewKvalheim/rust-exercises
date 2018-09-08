@@ -1,3 +1,10 @@
-pub fn check(candidate: &str) -> bool {
-    unimplemented!("Is {} an isogram?", candidate);
+use std::collections::HashSet;
+
+pub fn check(word: &str) -> bool {
+    let mut letters = HashSet::new();
+
+    word.chars()
+        .filter(|&character| character.is_alphabetic())
+        .find(|&letter| !letters.insert(letter.to_lowercase().collect::<String>()))
+        .is_none()
 }
