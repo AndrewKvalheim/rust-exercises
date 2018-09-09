@@ -1,3 +1,51 @@
 pub fn encode(n: u64) -> String {
-    unimplemented!("Say {} in English.", n);
+    match n {
+        0 => "zero".into(),
+        1 => "one".into(),
+        2 => "two".into(),
+        3 => "three".into(),
+        4 => "four".into(),
+        5 => "five".into(),
+        6 => "six".into(),
+        7 => "seven".into(),
+        8 => "eight".into(),
+        9 => "nine".into(),
+        10 => "ten".into(),
+        11 => "eleven".into(),
+        12 => "twelve".into(),
+        13 => "thirteen".into(),
+        14 => "fourteen".into(),
+        15 => "fifteen".into(),
+        16 => "sixteen".into(),
+        17 => "seventeen".into(),
+        18 => "eighteen".into(),
+        19 => "nineteen".into(),
+        20 => "twenty".into(),
+        30 => "thirty".into(),
+        40 => "forty".into(),
+        50 => "fifty".into(),
+        60 => "sixty".into(),
+        70 => "seventy".into(),
+        80 => "eighty".into(),
+        90 => "ninety".into(),
+        _ if n % e(18) == 0 => format!("{} quintillion", encode(n / e(18))),
+        _ if n % e(15) == 0 => format!("{} quadrillion", encode(n / e(15))),
+        _ if n % e(12) == 0 => format!("{} trillion", encode(n / e(12))),
+        _ if n % e(9) == 0 => format!("{} billion", encode(n / e(9))),
+        _ if n % e(6) == 0 => format!("{} million", encode(n / e(6))),
+        _ if n % e(3) == 0 => format!("{} thousand", encode(n / e(3))),
+        _ if n % e(2) == 0 => format!("{} hundred", encode(n / e(2))),
+        _ if n < e(2) => format!("{}-{}", encode(n / e(1) * e(1)), encode(n % e(1))),
+        _ if n < e(3) => format!("{} {}", encode(n / e(2) * e(2)), encode(n % e(2))),
+        _ if n < e(6) => format!("{} {}", encode(n / e(3) * e(3)), encode(n % e(3))),
+        _ if n < e(9) => format!("{} {}", encode(n / e(6) * e(6)), encode(n % e(6))),
+        _ if n < e(12) => format!("{} {}", encode(n / e(9) * e(9)), encode(n % e(9))),
+        _ if n < e(15) => format!("{} {}", encode(n / e(12) * e(12)), encode(n % e(12))),
+        _ if n < e(18) => format!("{} {}", encode(n / e(15) * e(15)), encode(n % e(15))),
+        _ => format!("{} {}", encode(n / e(18) * e(18)), encode(n % e(18))),
+    }
+}
+
+fn e(exponent: u32) -> u64 {
+    10u64.pow(exponent)
 }
