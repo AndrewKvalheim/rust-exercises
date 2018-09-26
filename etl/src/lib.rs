@@ -1,5 +1,11 @@
-use std::collections::BTreeMap;
+mod scrabble;
 
-pub fn transform(h: &BTreeMap<i32, Vec<char>>) -> BTreeMap<char, i32> {
-    unimplemented!("How will you transform the tree {:?}?", h)
+use scrabble::Rules;
+
+pub fn transform<'a, T, U>(specification: &'a T) -> U
+where
+    Rules: From<&'a T>,
+    U: From<Rules>,
+{
+    Rules::from(specification).into()
 }
