@@ -1,21 +1,15 @@
-#[derive(Debug, PartialEq)]
-pub struct DNA;
+mod dna;
+mod rfc_1542;
+mod rna;
+mod sequence;
 
-#[derive(Debug, PartialEq)]
-pub struct RNA;
+use sequence::Sequence;
+
+pub type DNA = Sequence<dna::Base>;
+pub type RNA = Sequence<rna::Base>;
 
 impl DNA {
-    pub fn new(dna: &str) -> Result<DNA, usize> {
-        unimplemented!("Construct new DNA from '{}' string. If string contains invalid nucleotides return index of first invalid nucleotide", dna);
-    }
-
-    pub fn to_rna(self) -> RNA {
-        unimplemented!("Transform DNA {:?} into corresponding RNA", self);
-    }
-}
-
-impl RNA {
-    pub fn new(rna: &str) -> Result<RNA, usize> {
-        unimplemented!("Construct new RNA from '{}' string. If string contains invalid nucleotides return index of first invalid nucleotide", rna);
+    pub fn to_rna(&self) -> RNA {
+        self.to_base::<rna::Base>()
     }
 }
