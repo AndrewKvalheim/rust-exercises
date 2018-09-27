@@ -1,23 +1,25 @@
-pub struct School {}
+use std::collections::{BTreeMap, BTreeSet};
+
+#[derive(Default)]
+pub struct School(BTreeMap<u32, BTreeSet<String>>);
 
 impl School {
-    pub fn new() -> School {
-        unimplemented!()
+    pub fn new() -> Self {
+        School(BTreeMap::new())
     }
 
-    pub fn add(&mut self, grade: u32, student: &str) {
-        unimplemented!("Add {} to the roster for {}", student, grade)
+    pub fn add(&mut self, grade: u32, name: &str) {
+        self.0
+            .entry(grade)
+            .or_insert_with(BTreeSet::new)
+            .insert(name.into());
+    }
+
+    pub fn grade(&self, grade: u32) -> Option<Vec<String>> {
+        Some(self.0.get(&grade)?.iter().cloned().collect())
     }
 
     pub fn grades(&self) -> Vec<u32> {
-        unimplemented!()
-    }
-
-    // If grade returned an `Option<&Vec<String>>`,
-    // the internal implementation would be forced to keep a `Vec<String>` to lend out.
-    // By returning an owned vector instead,
-    // the internal implementation is free to use whatever it chooses.
-    pub fn grade(&self, grade: u32) -> Option<Vec<String>> {
-        unimplemented!("Return the list of students in {}", grade)
+        self.0.keys().cloned().collect()
     }
 }
