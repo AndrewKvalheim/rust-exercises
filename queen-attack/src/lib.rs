@@ -1,31 +1,23 @@
-#[derive(Debug)]
-pub struct ChessPosition;
+mod chess;
 
-#[derive(Debug)]
-pub struct Queen;
+pub use chess::{Piece, Position as ChessPosition};
 
-impl ChessPosition {
-    pub fn new(rank: i32, file: i32) -> Option<Self> {
-        unimplemented!(
-            "Construct a ChessPosition struct, given the following rank, file: ({}, {}). If the position is invalid return None.",
-            rank,
-            file
-        );
-    }
-}
+pub struct Queen(ChessPosition);
 
 impl Queen {
     pub fn new(position: ChessPosition) -> Self {
-        unimplemented!(
-            "Given the chess position {:?}, construct a Queen struct.",
-            position
-        );
+        Queen(position)
+    }
+}
+
+impl Piece for Queen {
+    fn can_attack<T: Piece>(&self, other: &T) -> bool {
+        let (file, rank) = self.position() - other.position();
+
+        file == 0 || rank == 0 || file.abs() == rank.abs()
     }
 
-    pub fn can_attack(&self, other: &Queen) -> bool {
-        unimplemented!(
-            "Determine if this Queen can attack the other Queen {:?}",
-            other
-        );
+    fn position(&self) -> &ChessPosition {
+        &self.0
     }
 }
