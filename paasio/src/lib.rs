@@ -1,63 +1,81 @@
+mod inspectable;
+
+use inspectable::Inspectable;
 use std::io::{Read, Result, Write};
 
-pub struct ReadStats<R>(::std::marker::PhantomData<R>);
+pub type ReadStats<T> = Stats<T>;
+pub type WriteStats<T> = Stats<T>;
 
-impl<R: Read> ReadStats<R> {
-    // _wrapped is ignored because R is not bounded on Debug or Display and therefore
-    // can't be passed through format!(). For actual implementation you will likely
-    // wish to remove the leading underscore so the variable is not ignored.
-    pub fn new(_wrapped: R) -> ReadStats<R> {
-        unimplemented!()
-    }
+//
+// Common
+//
 
-    pub fn get_ref(&self) -> &R {
-        unimplemented!()
+pub struct Stats<T> {
+    bytes: usize,
+    io: T,
+    transfers: usize,
+}
+
+impl<T> Stats<T> {
+    pub fn new(io: T) -> Self {
+        Self {
+            bytes: 0,
+            io,
+            transfers: 0,
+        }
     }
 
     pub fn bytes_through(&self) -> usize {
-        unimplemented!()
+        self.bytes
     }
 
+    pub fn get_ref(&self) -> &T {
+        &self.io
+    }
+
+    pub fn transfers(&self) -> usize {
+        self.transfers
+    }
+}
+
+//
+// Read
+//
+
+impl<T: Read> Stats<T> {
     pub fn reads(&self) -> usize {
-        unimplemented!()
+        self.transfers()
     }
 }
 
-impl<R: Read> Read for ReadStats<R> {
-    fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-        unimplemented!("Collect statistics about this call reading {:?}", buf)
+impl<T: Read> Read for Stats<T> {
+    fn read(&mut self, buffer: &mut [u8]) -> Result<usize> {
+        self.io.read(buffer).inspect(|&bytes_through| {
+            self.bytes += bytes_through;
+            self.transfers += 1;
+        })
     }
 }
 
-pub struct WriteStats<W>(::std::marker::PhantomData<W>);
+//
+// Write
+//
 
-impl<W: Write> WriteStats<W> {
-    // _wrapped is ignored because W is not bounded on Debug or Display and therefore
-    // can't be passed through format!(). For actual implementation you will likely
-    // wish to remove the leading underscore so the variable is not ignored.
-    pub fn new(_wrapped: W) -> WriteStats<W> {
-        unimplemented!()
-    }
-
-    pub fn get_ref(&self) -> &W {
-        unimplemented!()
-    }
-
-    pub fn bytes_through(&self) -> usize {
-        unimplemented!()
-    }
-
+impl<T: Write> Stats<T> {
     pub fn writes(&self) -> usize {
-        unimplemented!()
+        self.transfers()
     }
 }
 
-impl<W: Write> Write for WriteStats<W> {
-    fn write(&mut self, buf: &[u8]) -> Result<usize> {
-        unimplemented!("Collect statistics about this call writing {:?}", buf)
+impl<T: Write> Write for Stats<T> {
+    fn flush(&mut self) -> Result<()> {
+        self.io.flush()
     }
 
-    fn flush(&mut self) -> Result<()> {
-        unimplemented!()
+    fn write(&mut self, buffer: &[u8]) -> Result<usize> {
+        self.io.write(buffer).inspect(|&bytes_through| {
+            self.bytes += bytes_through;
+            self.transfers += 1;
+        })
     }
 }
