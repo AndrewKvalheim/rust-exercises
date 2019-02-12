@@ -1,15 +1,20 @@
-#[derive(Debug, PartialEq)]
-pub enum Error {
-    IncompleteNumber,
-    Overflow,
-}
+mod iter_decoded;
+mod iter_encoded;
 
-/// Convert a list of numbers to a stream of bytes encoded with variable length encoding.
-pub fn to_bytes(values: &[u32]) -> Vec<u8> {
-    unimplemented!("Convert the values {:?} to a list of bytes", values)
-}
+pub use iter_decoded::Error;
+use iter_decoded::IterDecoded;
+use iter_encoded::IterEncoded;
 
-/// Given a stream of bytes, extract all numbers which are encoded in there.
 pub fn from_bytes(bytes: &[u8]) -> Result<Vec<u32>, Error> {
-    unimplemented!("Convert the list of bytes {:?} to a list of numbers", bytes)
+    IterDecoded::new(bytes.iter()).collect()
+}
+
+pub fn to_bytes(values: &[u32]) -> Vec<u8> {
+    reversed(IterEncoded::new(values.iter().rev()).collect())
+}
+
+fn reversed<T>(mut items: Vec<T>) -> Vec<T> {
+    items.reverse();
+
+    items
 }
