@@ -6,28 +6,29 @@ impl RailFence {
     }
 
     pub fn encode(&self, plaintext: &str) -> String {
+        let length = plaintext.chars().count();
+
         plaintext
             .chars()
             .zip(self.rail_indexes())
-            .fold(
-                self.new_rails(plaintext.len()),
-                |mut rails, (character, index)| {
-                    rails[index].push(character);
+            .fold(self.new_rails(length), |mut rails, (character, index)| {
+                rails[index].push(character);
 
-                    rails
-                },
-            )
+                rails
+            })
             .iter()
             .flatten()
             .collect()
     }
 
     pub fn decode(&self, ciphertext: &str) -> String {
+        let length = ciphertext.chars().count();
+
         ciphertext
             .chars()
-            .zip(self.plaintext_indexes(ciphertext.len()))
+            .zip(self.plaintext_indexes(length))
             .fold(
-                vec!['🥑'; ciphertext.len()],
+                vec![char::default(); length],
                 |mut plaintext, (character, index)| {
                     plaintext[index] = character;
 
@@ -47,34 +48,30 @@ impl RailFence {
     }
 
     fn plaintext_indexes(&self, length: usize) -> impl Iterator<Item = usize> + '_ {
-        let get_position = move |rail_index, position_index| {
-            rail_index
-                + 2 * match (rail_index, self.0 - rail_index) {
-                    (a, 0) => a * position_index,
-                    (0, b) => b * position_index,
-                    (a, b) => (position_index / 2) * a + ((position_index + 1) / 2) * b,
-                }
+        let get_index = move |rail, longitude| match (rail, self.0 - rail) {
+            (a, 0) | (0, a) => Some(rail + a * longitude * 2),
+            (a, b) => Some(rail + longitude / 2 * 2 * a + (longitude + 1) / 2 * 2 * b),
         };
 
-        (0..length).scan((0, 0), move |(rail_index, position_index), _| {
-            let mut position = get_position(*rail_index, *position_index);
+        (0..).scan((0, 0), move |(rail, longitude), _| {
+            let index = get_index(*rail, *longitude)
+                .filter(|&i| i < length)
+                .or_else(|| {
+                    *rail += 1;
+                    *longitude = 0;
 
-            if position >= length {
-                *rail_index += 1;
-                *position_index = 0;
+                    get_index(*rail, *longitude)
+                });
 
-                position = get_position(*rail_index, *position_index);
-            };
+            *longitude += 1;
 
-            *position_index += 1;
-
-            Some(position)
+            index
         })
     }
 
     fn rail_indexes(&self) -> impl Iterator<Item = usize> + '_ {
-        (0..).map(move |index| {
-            (((index + self.0) % (self.0 * 2)) as isize - self.0 as isize).abs() as usize
-        })
+        let width = self.0 as isize;
+
+        (0..).map(move |i| ((i + width) % (width * 2) - width).abs() as usize)
     }
 }
