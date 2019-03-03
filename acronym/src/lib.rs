@@ -1,3 +1,5 @@
+use std::convert::identity;
+
 pub fn abbreviate(term: &str) -> String {
     term.chars()
         .scan(None::<char>, |previous, character| {
@@ -12,7 +14,7 @@ pub fn abbreviate(term: &str) -> String {
 
             Some(letter)
         })
-        .filter_map(/* Pending RFC 2306 */ |l| l)
+        .filter_map(identity)
         .flat_map(char::to_uppercase)
         .collect()
 }
