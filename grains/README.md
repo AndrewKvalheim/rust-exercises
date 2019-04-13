@@ -6,14 +6,14 @@ on each square doubles.
 There once was a wise servant who saved the life of a prince. The king
 promised to pay whatever the servant could dream up. Knowing that the
 king loved chess, the servant told the king he would like to have grains
-of wheat. One grain on the first square of a chess board. Two grains on
-the next. Four on the third, and so on.
+of wheat. One grain on the first square of a chess board, with the number
+of grains doubling on each successive square.
 
-There are 64 squares on a chessboard.
+There are 64 squares on a chessboard (where square 1 has one grain, square 2 has two grains, and so on).
 
 Write code that shows:
-- how many grains were on each square, and
-- the total number of grains
+- how many grains were on a given square, and
+- the total number of grains on the chessboard
 
 ## For bonus points
 
@@ -67,6 +67,26 @@ To learn more about Rust tests refer to the [online test documentation][rust-tes
 
 Make sure to read the [Modules](https://doc.rust-lang.org/book/ch07-02-modules-and-use-to-control-scope-and-privacy.html) chapter if you
 haven't already, it will help you with organizing your files.
+
+## Further improvements
+
+After you have solved the exercise, please consider using the additional utilities, described in the [installation guide](https://exercism.io/tracks/rust/installation), to further refine your final solution.
+
+To format your solution, inside the solution directory use
+
+```bash
+cargo fmt
+```
+
+To see, if your solution contains some common ineffective use cases, inside the solution directory use
+
+```bash
+cargo clippy --all-targets
+```
+
+## Submitting the solution
+
+Generally you should submit all files in which you implemented your solution (`src/lib.rs` in most cases). If you are using any external crates, please consider submitting the `Cargo.toml` file. This will make the review process faster and clearer.
 
 ## Feedback, Issues, Pull Requests
 
