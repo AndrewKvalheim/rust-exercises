@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::iter::FromIterator;
+use std::iter::{Extend, FromIterator};
 
 pub struct Tally<T>(HashMap<T, u32>);
 
@@ -14,15 +14,21 @@ impl<T: Eq + Hash> Tally<T> {
     }
 }
 
+impl<T: Eq + Hash> Extend<T> for Tally<T> {
+    fn extend<I: IntoIterator<Item = T>>(&mut self, iterator: I) {
+        for item in iterator {
+            self.insert(item);
+        }
+    }
+}
+
 impl<T: Eq + Hash> FromIterator<T> for Tally<T> {
     fn from_iter<I: IntoIterator<Item = T>>(iterator: I) -> Self {
-        let mut counts = Self::new();
+        let mut tally = Self::new();
 
-        for item in iterator {
-            counts.insert(item);
-        }
+        tally.extend(iterator);
 
-        counts
+        tally
     }
 }
 

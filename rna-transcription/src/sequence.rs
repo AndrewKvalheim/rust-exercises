@@ -1,4 +1,4 @@
-use crate::rfc_1542::TryFrom;
+use std::convert::TryFrom;
 
 #[derive(Debug, PartialEq)]
 pub struct Sequence<T>(pub Vec<T>);

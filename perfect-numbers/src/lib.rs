@@ -19,6 +19,6 @@ pub fn classify(n: u64) -> Option<Classification> {
 fn aliquot_sum(n: u64) -> Option<u64> {
     match n {
         0 => None,
-        _ => Some((1..=(n / 2)).filter(|m| n % m == 0).sum()),
+        _ => Some((1..=n / 2).filter(|m| n % m == 0).sum()),
     }
 }

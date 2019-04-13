@@ -5,8 +5,8 @@ type ValueByLetter = BTreeMap<char, i32>;
 
 pub struct Rules(ValueByLetter);
 
-impl<'a> From<&'a LettersByValue> for Rules {
-    fn from(specification: &'a LettersByValue) -> Self {
+impl From<&LettersByValue> for Rules {
+    fn from(specification: &LettersByValue) -> Self {
         Rules(
             specification
                 .iter()

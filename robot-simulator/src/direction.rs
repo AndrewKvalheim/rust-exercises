@@ -1,12 +1,7 @@
 use Direction::*;
 
 #[derive(Debug, PartialEq)]
-pub enum Direction {
-    East,
-    North,
-    South,
-    West,
-}
+pub enum Direction { East, North, South, West }
 
 impl Direction {
     pub fn to_left(&self) -> Self {

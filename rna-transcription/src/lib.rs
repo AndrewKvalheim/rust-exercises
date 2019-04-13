@@ -1,5 +1,4 @@
 mod dna;
-mod rfc_1542;
 mod rna;
 mod sequence;
 

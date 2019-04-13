@@ -1,8 +1,9 @@
 mod tally;
 
+use std::collections::HashMap;
 use tally::Tally;
 
-pub fn word_count(text: &str) -> std::collections::HashMap<String, u32> {
+pub fn word_count(text: &str) -> HashMap<String, u32> {
     iter_words(text).collect::<Tally<_>>().into()
 }
 

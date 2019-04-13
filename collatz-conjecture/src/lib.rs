@@ -1,20 +1,11 @@
-pub fn collatz(n: u64) -> Option<u64> {
-    n.checked_sub(1).map(|m| Collatz(m).count() as u64)
-}
+use std::iter;
+use std::num::NonZeroU64;
 
-struct Collatz(u64);
+pub fn collatz(initial: u64) -> Option<u64> {
+    let steps = iter::successors(NonZeroU64::new(initial).map(NonZeroU64::get), |n| match n {
+        1 => None,
+        _ => Some(if n % 2 == 0 { n / 2 } else { 3 * n + 1 }),
+    });
 
-impl Iterator for Collatz {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        match 1 + self.0 {
-            1 => None,
-            n => {
-                self.0 = if n % 2 == 0 { n / 2 } else { 3 * n + 1 } - 1;
-
-                Some(n)
-            }
-        }
-    }
+    (steps.count() as u64).checked_sub(1)
 }

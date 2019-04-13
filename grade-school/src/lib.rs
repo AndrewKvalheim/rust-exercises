@@ -5,7 +5,7 @@ pub struct School(BTreeMap<u32, BTreeSet<String>>);
 
 impl School {
     pub fn new() -> Self {
-        School(BTreeMap::new())
+        Self(BTreeMap::new())
     }
 
     pub fn add(&mut self, grade: u32, name: &str) {

@@ -3,6 +3,8 @@
 use crate::nucleotide::Nucleotide;
 use crate::nucleotide::Nucleotide::*;
 use std::collections::HashMap;
+use std::convert::TryFrom;
+use std::iter::FromIterator;
 
 pub struct NucleotideCount {
     a: usize,
@@ -22,13 +24,6 @@ impl NucleotideCount {
     }
 }
 
-impl<'a> NucleotideCount {
-    // Pending RFC 1542
-    pub fn try_from(sequence: &'a str) -> Result<Self, char> {
-        sequence.chars().map(Nucleotide::try_from).collect()
-    }
-}
-
 impl Extend<Nucleotide> for NucleotideCount {
     fn extend<I: IntoIterator<Item = Nucleotide>>(&mut self, iterator: I) {
         for nucleotide in iterator {
@@ -39,16 +34,6 @@ impl Extend<Nucleotide> for NucleotideCount {
                 T => self.t += 1,
             }
         }
-    }
-}
-
-impl std::iter::FromIterator<Nucleotide> for NucleotideCount {
-    fn from_iter<I: IntoIterator<Item = Nucleotide>>(iterator: I) -> Self {
-        let mut counts = Self::new();
-
-        counts.extend(iterator);
-
-        counts
     }
 }
 
@@ -63,5 +48,23 @@ impl From<NucleotideCount> for HashMap<char, usize> {
         .iter()
         .cloned()
         .collect()
+    }
+}
+
+impl FromIterator<Nucleotide> for NucleotideCount {
+    fn from_iter<I: IntoIterator<Item = Nucleotide>>(iterator: I) -> Self {
+        let mut counts = Self::new();
+
+        counts.extend(iterator);
+
+        counts
+    }
+}
+
+impl TryFrom<&str> for NucleotideCount {
+    type Error = char;
+
+    fn try_from(sequence: &str) -> Result<Self, Self::Error> {
+        sequence.chars().map(Nucleotide::try_from).collect()
     }
 }

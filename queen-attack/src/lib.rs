@@ -6,7 +6,7 @@ pub struct Queen(ChessPosition);
 
 impl Queen {
     pub fn new(position: ChessPosition) -> Self {
-        Queen(position)
+        Self(position)
     }
 }
 

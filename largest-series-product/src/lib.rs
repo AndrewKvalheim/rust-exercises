@@ -13,30 +13,27 @@ pub fn lsp(numeral: &str, length: usize) -> Result<u64, Error> {
     } else {
         numeral
             .chars()
+            .map(|c| c.to_digit(10).ok_or_else(|| InvalidDigit(c)))
             .try_fold(
                 (None, VecDeque::with_capacity(length)),
-                |(largest, mut series), character| {
-                    let digit = character
-                        .to_digit(10)
-                        .ok_or_else(|| InvalidDigit(character))?
-                        .into();
+                |(mut largest, mut series), digit| {
+                    series.push_back(digit?.into());
 
-                    series.push_back(digit);
-
-                    let next = if series.len() == length {
+                    if series.len() == length {
                         let product = series.iter().product();
 
                         series.pop_front();
 
+                        // Pending RFC 1303, eRFC 2497
                         match largest {
-                            Some(l) if l >= product => largest,
-                            _ => Some(product),
+                            Some(l) if l >= product => (),
+                            _ => {
+                                largest.replace(product);
+                            }
                         }
-                    } else {
-                        largest
-                    };
+                    }
 
-                    Ok((next, series))
+                    Ok((largest, series))
                 },
             )
             .map(|(largest, _)| largest.unwrap_or(1))

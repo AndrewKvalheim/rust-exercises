@@ -22,7 +22,7 @@ fn generate_key(length: usize) -> String {
     let mut rng = thread_rng();
 
     (0..length)
-        .map(|_| rng.gen_range(b'a', 1 + b'z') as char)
+        .map(|_| char::from(rng.gen_range(b'a', 1 + b'z')))
         .collect()
 }
 

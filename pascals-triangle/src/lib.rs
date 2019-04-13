@@ -2,7 +2,7 @@ pub struct PascalsTriangle(u32);
 
 impl PascalsTriangle {
     pub fn new(height: u32) -> Self {
-        PascalsTriangle(height)
+        Self(height)
     }
 
     pub fn rows(&self) -> Vec<Vec<u32>> {
@@ -12,7 +12,7 @@ impl PascalsTriangle {
     fn row(level: u32) -> Vec<u32> {
         (0..=level)
             .scan(None, |value, index| {
-                *value = Some(value.map_or(1, |v| v * (1 + level - index) / index));
+                value.replace(value.map_or(1, |v| v * (1 + level - index) / index));
 
                 *value
             })

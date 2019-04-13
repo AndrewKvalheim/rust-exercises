@@ -1,11 +1,10 @@
 mod number;
 mod radix;
-mod rfc_1542;
 mod utilities;
 
 use number::Number;
 use radix::Radix;
-use rfc_1542::TryFrom;
+use std::convert::TryFrom;
 use utilities::reverse;
 use Error::*;
 

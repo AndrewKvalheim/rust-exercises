@@ -70,8 +70,8 @@ impl<T> Extend<T> for SimpleLinkedList<T> {
 // from
 //
 
-impl<'a, T: Clone> From<&'a [T]> for SimpleLinkedList<T> {
-    fn from(slice: &'a [T]) -> Self {
+impl<T: Clone> From<&[T]> for SimpleLinkedList<T> {
+    fn from(slice: &[T]) -> Self {
         slice.iter().collect()
     }
 }
@@ -169,7 +169,7 @@ impl<'a, T> SimpleLinkedListIterator<'a, T> {
     }
 }
 
-impl<'a, T> ExactSizeIterator for SimpleLinkedListIterator<'a, T> {}
+impl<T> ExactSizeIterator for SimpleLinkedListIterator<'_, T> {}
 
 impl<'a, T> Iterator for SimpleLinkedListIterator<'a, T> {
     type Item = &'a T;

@@ -8,5 +8,6 @@ pub fn find_saddle_points(rows: &[Vec<u64>]) -> Vec<(usize, usize)> {
                     .filter(move |&(j, x)| x == max && rows.iter().all(|row| row[j] >= *max))
                     .map(move |(j, _)| (i, j))
             })
-        }).collect()
+        })
+        .collect()
 }

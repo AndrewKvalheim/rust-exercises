@@ -8,9 +8,9 @@ use rayon::prelude::*;
 pub type Palindrome = u64;
 
 pub fn get_palindrome_products(start: u64, end: u64) -> Vec<Palindrome> {
-    (start..(1 + end))
+    (start..1 + end)
         .into_par_iter()
-        .flat_map(|x| (x..(1 + end)).into_par_iter().map(move |y| x * y))
+        .flat_map(|x| (x..1 + end).into_par_iter().map(move |y| x * y))
         .filter(|&product| is_palindrome(product))
         .collect()
 }

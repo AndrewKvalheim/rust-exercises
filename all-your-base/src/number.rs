@@ -25,15 +25,14 @@ impl Iterator for IterDigits {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        match self.1 {
-            0 => None,
-            _ => {
-                let (rest, digit) = (self.1 / self.0, self.1 % self.0);
+        if self.1 == 0 {
+            None
+        } else {
+            let digit = self.1 % self.0;
 
-                self.1 = rest;
+            self.1 /= self.0;
 
-                Some(digit)
-            }
+            Some(digit)
         }
     }
 }

@@ -1,12 +1,12 @@
 use crate::dna;
-use crate::rfc_1542::TryFrom;
+use std::convert::TryFrom;
 use Base::*;
 
 #[derive(Debug, PartialEq)]
 pub enum Base { A, C, G, U }
 
-impl<'a> From<&'a dna::Base> for Base {
-    fn from(base: &'a dna::Base) -> Self {
+impl From<&dna::Base> for Base {
+    fn from(base: &dna::Base) -> Self {
         match base {
             dna::Base::A => U,
             dna::Base::C => G,

@@ -1,20 +1,19 @@
-use crate::direction::Direction;
-use crate::direction::Direction::*;
+use crate::direction::Direction::{self, *};
 
 #[derive(Clone)]
 pub struct Position(i32, i32);
 
 impl Position {
     pub fn new(x: i32, y: i32) -> Self {
-        Position(x, y)
+        Self(x, y)
     }
 
     pub fn toward(&self, direction: &Direction, distance: i32) -> Self {
         match direction {
-            East => Position(self.0 + distance, self.1),
-            North => Position(self.0, self.1 + distance),
-            South => Position(self.0, self.1 - distance),
-            West => Position(self.0 - distance, self.1),
+            East => Self(self.0 + distance, self.1),
+            North => Self(self.0, self.1 + distance),
+            South => Self(self.0, self.1 - distance),
+            West => Self(self.0 - distance, self.1),
         }
     }
 }

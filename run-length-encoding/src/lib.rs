@@ -1,4 +1,4 @@
-use std::iter::{once, repeat};
+use std::iter;
 
 pub fn decode(code: &str) -> String {
     code.chars()
@@ -15,7 +15,7 @@ pub fn decode(code: &str) -> String {
                 number
             };
 
-            Some(repeat(character).take(length))
+            Some(iter::repeat(character).take(length))
         })
         .flatten()
         .collect()
@@ -24,7 +24,7 @@ pub fn decode(code: &str) -> String {
 pub fn encode(text: &str) -> String {
     text.chars()
         .map(Some)
-        .chain(once(None))
+        .chain(iter::once(None))
         .scan(None, |run, character| {
             let instruction = match (&run, character) {
                 (Some((previous, _)), Some(c)) if *previous == c => None,

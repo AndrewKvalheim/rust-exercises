@@ -1,40 +1,36 @@
-const MINUTES_PER_DAY: i32 = 1440;
-const MINUTES_PER_HOUR: i32 = 60;
+use std::fmt::{self, Display};
+
+const DAY: i32 = 1440;
+const HOUR: i32 = 60;
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct Clock {
-    minute_of_day: i32,
-}
+pub struct Clock(i32);
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        Self {
-            minute_of_day: Self::wrap_minute_of_day(hours * MINUTES_PER_HOUR + minutes),
-        }
+        Self(Self::wrap_around_day(HOUR * hours + minutes))
     }
 
     pub fn add_minutes(self, minutes: i32) -> Self {
-        Self {
-            minute_of_day: Self::wrap_minute_of_day(self.minute_of_day + minutes),
-        }
+        Self(Self::wrap_around_day(self.0 + minutes))
     }
 
     fn hour(&self) -> i32 {
-        self.minute_of_day / MINUTES_PER_HOUR
+        self.0 / HOUR
     }
 
     fn minute(&self) -> i32 {
-        self.minute_of_day % MINUTES_PER_HOUR
+        self.0 % HOUR
     }
 
-    fn wrap_minute_of_day(minute_of_day: i32) -> i32 {
+    fn wrap_around_day(minutes: i32) -> i32 {
         // Pending RFC 2169
-        (minute_of_day % MINUTES_PER_DAY + MINUTES_PER_DAY) % MINUTES_PER_DAY
+        (minutes % DAY + DAY) % DAY
     }
 }
 
-impl std::fmt::Display for Clock {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(formatter, "{:02}:{:02}", self.hour(), self.minute())
+impl Display for Clock {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:02}:{:02}", self.hour(), self.minute())
     }
 }

@@ -1,10 +1,10 @@
 pub fn rotate(text: &str, key: u8) -> String {
-    let substitute = |start, end, c| (start + (c as u8 - start + key) % (end - start + 1)) as char;
+    let substitute = |start, c| char::from(start + (c as u8 - start + key) % 26);
 
     text.chars()
         .map(|character| match character {
-            'A'...'Z' => substitute(b'A', b'Z', character),
-            'a'...'z' => substitute(b'a', b'z', character),
+            'A'...'Z' => substitute(b'A', character),
+            'a'...'z' => substitute(b'a', character),
             _ => character,
         })
         .collect()

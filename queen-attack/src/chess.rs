@@ -1,3 +1,5 @@
+use std::ops::Sub;
+
 pub trait Piece {
     fn can_attack<T: Piece>(&self, other: &T) -> bool;
 
@@ -8,7 +10,7 @@ pub struct Position(i32, i32);
 
 impl Position {
     pub fn new(rank: i32, file: i32) -> Option<Self> {
-        Some(Position(Self::validate(file)?, Self::validate(rank)?))
+        Some(Self(Self::validate(file)?, Self::validate(rank)?))
     }
 
     fn validate(component: i32) -> Option<i32> {
@@ -16,7 +18,7 @@ impl Position {
     }
 }
 
-impl<'a> std::ops::Sub for &'a Position {
+impl Sub for &Position {
     type Output = (i32, i32);
 
     fn sub(self, other: Self) -> Self::Output {
