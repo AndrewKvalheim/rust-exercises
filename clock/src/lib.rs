@@ -1,3 +1,5 @@
+#![feature(euclidean_division)]
+
 use std::fmt::{self, Display};
 
 const DAY: i32 = 1440;
@@ -8,11 +10,15 @@ pub struct Clock(i32);
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        Self(Self::wrap_around_day(HOUR * hours + minutes))
+        Self::from_minutes(hours * HOUR + minutes)
     }
 
     pub fn add_minutes(self, minutes: i32) -> Self {
-        Self(Self::wrap_around_day(self.0 + minutes))
+        Self::from_minutes(self.0 + minutes)
+    }
+
+    fn from_minutes(minutes: i32) -> Self {
+        Self(minutes.rem_euclid(DAY))
     }
 
     fn hour(&self) -> i32 {
@@ -21,11 +27,6 @@ impl Clock {
 
     fn minute(&self) -> i32 {
         self.0 % HOUR
-    }
-
-    fn wrap_around_day(minutes: i32) -> i32 {
-        // Pending RFC 2169
-        (minutes % DAY + DAY) % DAY
     }
 }
 

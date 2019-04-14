@@ -1,4 +1,4 @@
-use std::convert::TryFrom;
+use std::convert::{TryFrom, TryInto};
 
 #[derive(Debug, PartialEq)]
 pub struct Sequence<T>(pub Vec<T>);
@@ -10,9 +10,8 @@ impl<'a, T: 'a> Sequence<T> {
 }
 
 impl<T: TryFrom<char>> Sequence<T> {
-    // Spec contradicts clippy::new_ret_no_self.
     pub fn new(text: &str) -> Result<Self, usize> {
-        Self::try_from(text)
+        text.try_into()
     }
 }
 
@@ -22,7 +21,7 @@ impl<T: TryFrom<char>> TryFrom<&str> for Sequence<T> {
     fn try_from(text: &str) -> Result<Self, Self::Error> {
         text.chars()
             .enumerate()
-            .map(|(i, c)| T::try_from(c).map_err(|_| i))
+            .map(|(i, c)| c.try_into().map_err(|_| i))
             .collect::<Result<_, _>>()
             .map(Sequence)
     }

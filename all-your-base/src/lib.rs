@@ -3,8 +3,7 @@ mod radix;
 mod utilities;
 
 use number::Number;
-use radix::Radix;
-use std::convert::TryFrom;
+use std::convert::TryInto;
 use utilities::reverse;
 use Error::*;
 
@@ -16,13 +15,13 @@ pub enum Error {
 }
 
 pub fn convert(from_digits: &[u32], from_radix: u32, to_radix: u32) -> Result<Vec<u32>, Error> {
-    let from_radix = Radix::try_from(from_radix).map_err(|_| InvalidInputBase)?;
-    let to_radix = Radix::try_from(to_radix).map_err(|_| InvalidOutputBase)?;
+    let from_radix = from_radix.try_into().map_err(|_| InvalidInputBase)?;
+    let to_radix = to_radix.try_into().map_err(|_| InvalidOutputBase)?;
 
-    let digits = Number::try_from_digits(from_radix, from_digits.iter().rev())
+    let to_digits = Number::try_from_digits(from_radix, from_digits.iter().rev())
         .map_err(InvalidDigit)?
         .digits(to_radix)
         .collect();
 
-    Ok(reverse(digits))
+    Ok(reverse(to_digits))
 }
