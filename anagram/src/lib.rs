@@ -1,9 +1,21 @@
+mod letter_counts;
+mod normalized_word;
+
+use letter_counts::LetterCounts;
+use normalized_word::NormalizedWord;
 use std::collections::HashSet;
 
-pub fn anagrams_for<'a>(word: &str, possible_anagrams: &[&str]) -> HashSet<&'a str> {
-    unimplemented!(
-        "For the '{}' word find anagrams among the following words: {:?}",
-        word,
-        possible_anagrams
-    );
+pub fn anagrams_for<'a>(word: &str, candidates: &[&'a str]) -> HashSet<&'a str> {
+    let word = NormalizedWord::from(word);
+    let letter_counts = LetterCounts::from(&word);
+
+    candidates
+        .iter()
+        .filter(|&&candidate| {
+            let candidate = NormalizedWord::from(candidate);
+
+            candidate != word && LetterCounts::from(&candidate) == letter_counts
+        })
+        .cloned()
+        .collect()
 }
