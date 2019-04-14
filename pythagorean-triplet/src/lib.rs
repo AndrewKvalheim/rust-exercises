@@ -1,13 +1,13 @@
-const PERIMETER: u32 = 1000;
+use std::collections::HashSet;
 
-pub fn find() -> Option<u32> {
-    (1..=PERIMETER / 2)
+pub fn find(perimeter: u32) -> HashSet<[u32; 3]> {
+    (1..perimeter / 3)
         .map(|a| {
-            let b = (PERIMETER.pow(2) / 2 - PERIMETER * a) / (PERIMETER - a);
-            let c = PERIMETER - (a + b);
+            let b = (perimeter.pow(2) / 2 - perimeter * a) / (perimeter - a);
+            let c = perimeter - (a + b);
 
-            (a, b, c)
+            [a, b, c]
         })
-        .find(|(a, b, c)| a.pow(2) + b.pow(2) == c.pow(2))
-        .map(|(a, b, c)| a * b * c)
+        .filter(|[a, b, c]| a <= b && a.pow(2) + b.pow(2) == c.pow(2))
+        .collect()
 }
