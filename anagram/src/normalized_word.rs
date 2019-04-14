@@ -2,8 +2,8 @@
 pub struct NormalizedWord(Vec<String>);
 
 impl NormalizedWord {
-    pub fn letters(&self) -> impl Iterator<Item = &String> {
-        self.0.iter()
+    pub fn letters(&self) -> impl Iterator<Item = &str> {
+        self.0.iter().map(String::as_str)
     }
 }
 
