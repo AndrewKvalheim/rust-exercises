@@ -2,3 +2,6 @@
 edition = "2018"
 name = "luhn-from"
 version = "0.0.0"
+
+[dependencies]
+luhn = { path = "../luhn" }
