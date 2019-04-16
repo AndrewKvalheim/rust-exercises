@@ -1,5 +1,3 @@
-extern crate chrono;
-
 use chrono::{DateTime, Duration, Utc};
 
 pub fn after(start: DateTime<Utc>) -> DateTime<Utc> {

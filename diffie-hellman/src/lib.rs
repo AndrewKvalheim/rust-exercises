@@ -1,9 +1,7 @@
-extern crate rand;
-
 mod utilities;
 
-use utilities::modular_pow;
 use rand::prelude::*;
+use utilities::modular_pow;
 
 pub fn private_key(p: u64) -> u64 {
     thread_rng().gen_range(2, p)

@@ -1,7 +1,4 @@
 #[cfg(feature = "grapheme")]
-extern crate grapheme;
-
-#[cfg(feature = "grapheme")]
 use grapheme::UnicodeSegmentation;
 
 pub fn reverse(text: &str) -> String {

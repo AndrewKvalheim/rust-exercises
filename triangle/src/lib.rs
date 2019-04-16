@@ -1,5 +1,3 @@
-extern crate num;
-
 use num::Num;
 
 pub struct Triangle<T>(T, T, T);

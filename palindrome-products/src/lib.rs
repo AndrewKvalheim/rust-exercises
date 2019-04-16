@@ -1,8 +1,6 @@
 // Pending rayon-rs/rayon#572
 #![allow(clippy::range_plus_one)]
 
-extern crate rayon;
-
 use rayon::prelude::*;
 
 pub type Palindrome = u64;

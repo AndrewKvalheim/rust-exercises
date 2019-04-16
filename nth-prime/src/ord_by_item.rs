@@ -1,6 +1,6 @@
 use std::cmp::{Ord, Ordering, PartialEq, PartialOrd};
 
-// Allows sorting iterators by their next item
+// Wraps an iterator to allow comparison by its next item.
 pub struct OrdByItem<I>
 where
     I: Iterator,
