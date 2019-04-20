@@ -1,9 +1,5 @@
-#![feature(generators, generator_trait)]
-
 use std::collections::HashMap;
 use std::iter;
-use std::ops::{Generator, GeneratorState::*};
-use std::pin::Pin;
 
 struct Component {
     is_leading: bool,
@@ -45,42 +41,30 @@ fn is_solution(components: &[Component], coefficients: &[u8]) -> bool {
         == Some(0)
 }
 
-fn iter_kpermutations(k: usize) -> impl Iterator<Item = Vec<u8>> {
-    // Adapted from https://docs.python.org/3/library/itertools.html#itertools.permutations
-    let mut generator = move || {
-        let iter_insets = |position| (1..10 - position).rev();
+// Adapted from https://docs.python.org/3/library/itertools.html#itertools.permutations
+pub fn iter_kpermutations(k: usize) -> impl Iterator<Item = Vec<u8>> {
+    let iter_insets = |position| (1..10 - position).rev();
 
-        let mut cycles = (0..k).map(iter_insets).collect::<Vec<_>>();
-        let mut permutation = (0..10).collect::<Vec<_>>();
+    let mut iters_insets = (0..k).map(iter_insets).collect::<Vec<_>>();
+    let mut permutation = (0..10).collect::<Vec<_>>();
 
-        yield permutation[..k].to_vec();
+    iter::once(permutation[..k].to_owned()).chain(iter::from_fn(move || {
+        (0..k)
+            .rev()
+            .find_map(|position| match iters_insets[position].next() {
+                None => {
+                    permutation[position..].rotate_left(1);
+                    iters_insets[position] = iter_insets(position);
 
-        'outer: loop {
-            for position in (0..k).rev() {
-                match cycles[position].next() {
-                    None => {
-                        permutation[position..].rotate_left(1);
-
-                        cycles[position] = iter_insets(position);
-                    }
-                    Some(inset) => {
-                        permutation.swap(position, 10 - inset);
-
-                        yield permutation[..k].to_vec();
-
-                        continue 'outer;
-                    }
+                    None
                 }
-            }
+                Some(inset) => {
+                    permutation.swap(position, 10 - inset);
 
-            break;
-        }
-    };
-
-    iter::from_fn(move || match Pin::new(&mut generator).resume() {
-        Complete(()) => None,
-        Yielded(permutation) => Some(permutation),
-    })
+                    Some(permutation[..k].to_owned())
+                }
+            })
+    }))
 }
 
 fn parse(equation: &str) -> Vec<Component> {
