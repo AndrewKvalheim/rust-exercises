@@ -2,3 +2,7 @@
 edition = "2018"
 name = "anagram"
 version = "0.0.0"
+
+[dependencies]
+caseless = "0.2"
+unicode-normalization = "0.1"

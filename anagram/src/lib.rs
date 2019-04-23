@@ -1,3 +1,5 @@
+#![feature(iter_copied)]
+
 mod letter_counts;
 mod normalized_word;
 
@@ -16,6 +18,6 @@ pub fn anagrams_for<'a>(word: &str, candidates: &[&'a str]) -> HashSet<&'a str> 
 
             candidate != word && LetterCounts::from(&candidate) == letter_counts
         })
-        .cloned()
+        .copied()
         .collect()
 }

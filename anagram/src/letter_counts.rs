@@ -3,10 +3,10 @@ use std::collections::HashMap;
 use std::iter::FromIterator;
 
 #[derive(PartialEq)]
-pub struct LetterCounts<'a>(HashMap<&'a str, u32>);
+pub struct LetterCounts(HashMap<char, u32>);
 
-impl<'a> LetterCounts<'a> {
-    fn insert(&mut self, letter: &'a str) {
+impl LetterCounts {
+    fn insert(&mut self, letter: char) {
         *self.0.entry(letter).or_insert(0) += 1;
     }
 
@@ -15,22 +15,22 @@ impl<'a> LetterCounts<'a> {
     }
 }
 
-impl<'a> Extend<&'a str> for LetterCounts<'a> {
-    fn extend<I: IntoIterator<Item = &'a str>>(&mut self, letters: I) {
+impl Extend<char> for LetterCounts {
+    fn extend<I: IntoIterator<Item = char>>(&mut self, letters: I) {
         for letter in letters {
             self.insert(letter);
         }
     }
 }
 
-impl<'a> From<&'a NormalizedWord> for LetterCounts<'a> {
-    fn from(word: &'a NormalizedWord) -> Self {
+impl From<&NormalizedWord> for LetterCounts {
+    fn from(word: &NormalizedWord) -> Self {
         word.letters().collect()
     }
 }
 
-impl<'a> FromIterator<&'a str> for LetterCounts<'a> {
-    fn from_iter<I: IntoIterator<Item = &'a str>>(letters: I) -> Self {
+impl FromIterator<char> for LetterCounts {
+    fn from_iter<I: IntoIterator<Item = char>>(letters: I) -> Self {
         let mut counts = Self::new();
 
         counts.extend(letters);
