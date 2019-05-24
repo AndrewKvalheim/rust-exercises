@@ -1,6 +1,5 @@
 pub fn square(n: u32) -> u64 {
-    // Pending RFC 1303 or RFC 1434
-    if !(1 <= n && n <= 64) {
+    if !((1..=64).contains(&n)) {
         panic!("Square must be between 1 and 64");
     }
 
