@@ -14,11 +14,11 @@ pub fn get_palindrome_products(start: u64, end: u64) -> Vec<Palindrome> {
 }
 
 pub fn max(palindromes: &[Palindrome]) -> Option<Palindrome> {
-    palindromes.iter().max().cloned()
+    palindromes.iter().max().copied()
 }
 
 pub fn min(palindromes: &[Palindrome]) -> Option<Palindrome> {
-    palindromes.iter().min().cloned()
+    palindromes.iter().min().copied()
 }
 
 fn is_palindrome(n: u64) -> bool {
