@@ -60,7 +60,7 @@ fn test_custom() {
 #[test]
 #[ignore]
 fn test_f64() {
-    // a tiny bit more complicated becuase range isn't natively implemented on floats
+    // a tiny bit more complicated because range isn't natively implemented on floats
     // NOTE: this test depends on a language feature introduced in Rust 1.34. If you
     // have an older compiler, upgrade. If you have an older compiler and cannot upgrade,
     // feel free to ignore this test.
