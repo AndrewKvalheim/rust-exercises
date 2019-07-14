@@ -1,5 +1,3 @@
-#![feature(iter_copied)]
-
 mod letter_counts;
 mod normalized_word;
 
