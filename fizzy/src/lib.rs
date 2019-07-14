@@ -9,8 +9,7 @@ use std::ops::{Add, Rem};
 
 pub fn fizz_buzz<'a, T>() -> Fizzy<'a, T>
 where
-    T: 'a + Add + From<u8> + Rem,
-    <T as Rem>::Output: From<u8> + PartialEq,
+    T: 'a + Add + From<u8> + PartialEq + Rem<Output = T>,
 {
     Fizzy::new()
         .add_matcher(Matcher::new(|n| n % 3.into() == 0.into(), "fizz"))
