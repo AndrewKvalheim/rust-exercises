@@ -1,12 +1,14 @@
-// The code below is a stub. Just enough to satisfy the compiler.
-// In order to pass the tests you can add-to or change any of this code.
+mod digit_scan;
+mod iter_groups;
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
-    InvalidRowCount(usize),
     InvalidColumnCount(usize),
+    InvalidRowCount(usize),
 }
 
-pub fn convert(input: &str) -> Result<String, Error> {
-    unimplemented!("Convert the input '{}' to a string", input);
+pub fn convert(image: &str) -> Result<String, Error> {
+    iter_groups::iter_groups(image.lines())
+        .collect::<Result<Vec<_>, _>>()
+        .map(|g| g.join(","))
 }
