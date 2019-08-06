@@ -1,61 +1,80 @@
-use std::fmt::Debug;
-use std::marker::PhantomData;
+use std::iter::Extend;
 
-#[derive(Debug, PartialEq)]
-pub struct CustomSet<T> {
-    // This field is here to make the template compile and not to
-    // complain about unused type parameter 'T'. Once you start
-    // solving the exercise, delete this field and the 'std::marker::PhantomData'
-    // import.
-    phantom: PhantomData<T>,
+#[derive(Clone, Debug)]
+pub struct CustomSet<T>(Vec<T>);
+
+impl<T> CustomSet<T> {
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
 
-impl<T: Debug> CustomSet<T> {
-    pub fn new(input: &[T]) -> Self {
-        unimplemented!(
-            "From the given input '{:?}' construct a new CustomSet struct.",
-            input
-        );
-    }
+impl<T: Clone + PartialEq> CustomSet<T> {
+    pub fn new(elements: &[T]) -> Self {
+        let mut set = Self(Vec::new());
 
-    pub fn contains(&self, element: &T) -> bool {
-        unimplemented!(
-            "Determine if the '{:?}' element is present in the CustomSet struct.",
-            element
-        );
-    }
+        set.extend(elements);
 
-    pub fn add(&mut self, element: T) {
-        unimplemented!("Add the '{:?}' element to the CustomSet struct.", element);
-    }
-
-    pub fn is_subset(&self, other: &Self) -> bool {
-        unimplemented!(
-            "Determine if the CustomSet struct is a subset of the other '{:?}' struct.",
-            other
-        );
-    }
-
-    pub fn is_empty(&self) -> bool {
-        unimplemented!("Determine if the CustomSet struct is empty.");
-    }
-
-    pub fn is_disjoint(&self, other: &Self) -> bool {
-        unimplemented!(
-            "Determine if the CustomSet struct and the other struct '{:?}' are disjoint.",
-            other
-        );
-    }
-
-    pub fn intersection(&self, other: &Self) -> Self {
-        unimplemented!("Construct a new CustomSet struct that is an intersection between current struct and the other struct '{:?}'.", other);
+        set
     }
 
     pub fn difference(&self, other: &Self) -> Self {
-        unimplemented!("Construct a new CustomSet struct that is a difference between current struct and the other struct '{:?}'.", other);
+        Self(
+            self.0
+                .iter()
+                .filter(|e| !other.contains(e))
+                .cloned()
+                .collect(),
+        )
+    }
+
+    pub fn intersection(&self, other: &Self) -> Self {
+        Self(
+            self.0
+                .iter()
+                .filter(|e| other.contains(e))
+                .cloned()
+                .collect(),
+        )
     }
 
     pub fn union(&self, other: &Self) -> Self {
-        unimplemented!("Construct a new CustomSet struct that is an union between current struct and the other struct '{:?}'.", other);
+        let mut set = self.clone();
+
+        set.extend(&other.0);
+
+        set
+    }
+}
+
+impl<T: PartialEq> CustomSet<T> {
+    pub fn add(&mut self, element: T) {
+        if !self.contains(&element) {
+            self.0.push(element);
+        }
+    }
+
+    pub fn contains(&self, element: &T) -> bool {
+        self.0.contains(element)
+    }
+
+    pub fn is_disjoint(&self, other: &Self) -> bool {
+        self.0.iter().all(|e| !other.contains(e))
+    }
+
+    pub fn is_subset(&self, other: &Self) -> bool {
+        self.0.iter().all(|e| other.contains(e))
+    }
+}
+
+impl<'a, T: 'a + Clone + PartialEq> Extend<&'a T> for CustomSet<T> {
+    fn extend<I: IntoIterator<Item = &'a T>>(&mut self, elements: I) {
+        elements.into_iter().cloned().for_each(|e| self.add(e));
+    }
+}
+
+impl<T: PartialEq> PartialEq for CustomSet<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.len() == other.0.len() && self.is_subset(other)
     }
 }
