@@ -5,8 +5,8 @@ pub fn rotate(text: &str, key: i8) -> String {
 
     text.chars()
         .map(|character| match character {
-            'A'...'Z' => replace(b'A', character),
-            'a'...'z' => replace(b'a', character),
+            'A'..='Z' => replace(b'A', character),
+            'a'..='z' => replace(b'a', character),
             _ => character,
         })
         .collect()

@@ -1,5 +1,5 @@
-// Pending rust-lang-nursery/rust-clippy#2226
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::new_without_default_derive))]
+// Pending rust-lang/rust#26925
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::new_without_default))]
 
 type Next<T> = Option<Box<Node<T>>>;
 
@@ -124,7 +124,6 @@ impl<T> IntoIterator for SimpleLinkedList<T> {
     type Item = T;
 
     fn into_iter(self) -> Self::IntoIter {
-        // Pending RFC 2338
         SimpleLinkedListIntoIterator(self)
     }
 }

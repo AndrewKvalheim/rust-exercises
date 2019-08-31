@@ -1,9 +1,8 @@
 pub fn annotate(minefield: &[&str]) -> Vec<String> {
-    let mut rows: Vec<Vec<u8>> = minefield.iter().map(|&r| r.as_bytes().to_vec()).collect();
+    let mut rows: Vec<Vec<u8>> = minefield.iter().map(|r| r.as_bytes().to_vec()).collect();
 
     let (m, n) = (rows.first().map_or(0, |r| r.len()), rows.len());
 
-    #[allow(clippy::needless_range_loop)] // rust-lang/rust-clippy#2277
     for j in 0..n {
         for i in 0..m {
             if rows[j][i] == b'*' {
@@ -20,12 +19,12 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
 fn increment(cell: &mut u8) {
     *cell = match cell {
         b' ' => b'1',
-        b'1'...b'7' => *cell + 1,
+        b'1'..=b'7' => *cell + 1,
         _ => *cell,
     };
 }
 
-fn spread<F: FnMut(usize) -> ()>(mut f: F, length: usize, index: usize) {
+fn spread<F: FnMut(usize)>(mut f: F, length: usize, index: usize) {
     if index >= 1 {
         f(index - 1);
     }
