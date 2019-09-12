@@ -14,6 +14,7 @@ impl<'a, T> Matcher<'a, T> {
     }
 
     pub fn matching_word(&self, value: T) -> Option<&str> {
+        // Pending RFC 2757
         if (self.predicate)(value) {
             Some(&self.word)
         } else {

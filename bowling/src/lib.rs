@@ -55,6 +55,7 @@ impl BowlingGame {
     }
 
     pub fn score(&self) -> Option<u16> {
+        // Pending RFC 2757
         if self.is_complete() {
             Some(self.score)
         } else {
@@ -83,6 +84,7 @@ impl BowlingGame {
     }
 
     fn step_half_frame(&mut self, pinfall: u16) {
+        // Pending RFC 2757
         self.previous_pinfall = if pinfall == PINS || self.previous_pinfall.is_some() {
             None
         } else {

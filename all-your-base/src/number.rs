@@ -25,6 +25,7 @@ impl Iterator for IterDigits {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // Pending RFC 2757
         if self.1 == 0 {
             None
         } else {

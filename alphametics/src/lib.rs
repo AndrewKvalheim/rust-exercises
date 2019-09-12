@@ -11,6 +11,7 @@ pub fn solve(equation: &str) -> Option<HashMap<char, u8>> {
     let components = parse(equation);
 
     iter_kpermutations(components.len()).find_map(|coefficients| {
+        // Pending RFC 2757
         if is_solution(&components, &coefficients) {
             Some(coefficient_by_symbol(&components, &coefficients))
         } else {
@@ -32,6 +33,7 @@ fn is_solution(components: &[Component], coefficients: &[u8]) -> bool {
         .iter()
         .zip(coefficients.iter())
         .try_fold(0, |sum, (component, &coefficient)| {
+            // Pending RFC 2757
             if component.is_leading && coefficient == 0 {
                 None
             } else {

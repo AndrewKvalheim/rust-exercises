@@ -4,6 +4,7 @@ pub struct Triangle<T>(T, T, T);
 
 impl<T: Copy + Num + PartialOrd> Triangle<T> {
     pub fn build(sides: [T; 3]) -> Option<Self> {
+        // Pending RFC 2757
         if Self::validate(&sides) {
             Some(Triangle(sides[0], sides[1], sides[2]))
         } else {

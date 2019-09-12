@@ -32,6 +32,7 @@ where
         .chars()
         .zip(key.chars().cycle())
         .map(|(c, k)| {
+            // Pending RFC 2757
             if c.is_ascii_lowercase() && k.is_ascii_lowercase() {
                 Some((b'a' + operation(26 + c as u8 - b'a', k as u8 - b'a') % 26) as char)
             } else {

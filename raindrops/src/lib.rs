@@ -3,7 +3,14 @@ const CODE: &[(usize, &str)] = &[(3, "Pling"), (5, "Plang"), (7, "Plong")];
 pub fn raindrops(number: usize) -> String {
     let sound = CODE
         .iter()
-        .filter_map(|&(f, p)| if number % f == 0 { Some(p) } else { None })
+        .filter_map(|&(f, p)| {
+            // Pending RFC 2757
+            if number % f == 0 {
+                Some(p)
+            } else {
+                None
+            }
+        })
         .collect::<String>();
 
     if sound.is_empty() {
